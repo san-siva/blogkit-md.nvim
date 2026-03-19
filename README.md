@@ -4,8 +4,11 @@ A Neovim plugin that launches a live preview of the current markdown buffer usin
 
 ## Requirements
 
-- Neovim 0.9+
-- Node.js + npm
+| Requirement | Version  |
+| :---------- | :------- |
+| Neovim      | 0.9+     |
+| Node.js     | LTS      |
+| npm         | bundled  |
 
 No local clone needed — dependencies are installed automatically on first use.
 
