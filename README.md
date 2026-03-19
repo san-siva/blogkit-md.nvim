@@ -2,6 +2,8 @@
 
 A Neovim plugin that launches a live preview of the current markdown buffer using [`@san-siva/blogkit-md`](https://github.com/san-siva/blogkit-md).
 
+<img width="1717" height="1080" alt="Screenshot 2026-03-19 at 1 18 51 PM" src="https://github.com/user-attachments/assets/f15579f9-9a75-4a03-8fc4-e0fa88333e66" />
+
 ## Requirements
 
 | Requirement | Version  |
