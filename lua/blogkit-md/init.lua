@@ -16,16 +16,19 @@ local workspace_files = {
     "dev": "next dev"
   },
   "dependencies": {
+    "@san-siva/blogkit": "latest",
     "@san-siva/blogkit-md": "latest",
+    "@san-siva/stylekit": "latest",
     "next": "latest",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sass": "latest"
   }
 }
 ]],
 	['next.config.mjs'] = [[/** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@san-siva/blogkit-md'],
+  transpilePackages: ['@san-siva/blogkit', '@san-siva/blogkit-md', '@san-siva/stylekit'],
 };
 export default nextConfig;
 ]],
@@ -50,10 +53,39 @@ export default nextConfig;
   "exclude": ["node_modules"]
 }
 ]],
-	['app/layout.tsx'] = [[export default function Layout({ children }: { children: React.ReactNode }) {
+	['app/layout.tsx'] = [[import { JetBrains_Mono, Montserrat, Rubik } from 'next/font/google';
+
+import '@san-siva/blogkit/styles.css';
+import '@san-siva/stylekit/styles/globals.scss';
+import styles from '@san-siva/stylekit/styles/index.module.scss';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  variable: '--font-montserrat',
+});
+
+const rubik = Rubik({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-rubik',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-jetbrains-mono',
+});
+
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${montserrat.variable} ${rubik.variable} ${jetbrainsMono.variable}`}>
+        <div className={styles.page}>{children}</div>
+      </body>
     </html>
   );
 }
@@ -166,7 +198,7 @@ function Module.start()
 
 	ensure_workspace_files()
 
-	if vim.fn.isdirectory(workspace_dir .. '/node_modules') == 0 then
+	if vim.fn.isdirectory(workspace_dir .. '/node_modules/@san-siva/stylekit') == 0 then
 		vim.notify('BlogkitMd: installing dependencies (first run)...', vim.log.levels.INFO)
 		vim.fn.jobstart({ 'npm', 'install', '--prefix', workspace_dir }, {
 			on_exit = function(_, code)
