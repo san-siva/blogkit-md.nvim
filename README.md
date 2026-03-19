@@ -9,7 +9,7 @@ A Neovim plugin that launches a live preview of the current markdown buffer usin
 
 No local clone needed — dependencies are installed automatically on first use.
 
-## Installation
+## Getting started
 
 ### lazy.nvim
 
@@ -41,10 +41,15 @@ use { 'san-siva/blogkit-md.nvim' }
 
 ## How it works
 
-On first run the plugin bootstraps a minimal Next.js workspace at `~/.local/share/nvim/blogkit-md.nvim/` and runs `npm install` to fetch `@san-siva/blogkit-md` from the npm registry. Subsequent runs skip the install step and start the server immediately.
+The plugin bootstraps a minimal Next.js workspace at `~/.local/share/nvim/blogkit-md.nvim/` and installs `@san-siva/blogkit-md` from npm on first run. Subsequent runs skip the install and start the server immediately.
 
-The plugin registers a `BufWritePost` autocmd on `*.md` files. On every save it updates a `reload-trigger.ts` file inside the workspace. Since `page.tsx` imports that file, Next.js HMR detects the change and re-renders the page, which re-reads the markdown file via `BlogPost`.
+A `BufWritePost` autocmd fires on every markdown save, updating a `reload-trigger.ts` file inside the workspace. Since `page.tsx` imports that file, Next.js HMR detects the change and re-renders the page — which re-reads the markdown via `BlogPost`.
 
 ## License
 
 MIT
+
+## About
+
+- **Author:** [Santhosh Siva](https://www.santhoshsiva.dev)
+- **License:** [MIT](https://github.com/san-siva/blogkit-md.nvim/blob/master/LICENSE)
