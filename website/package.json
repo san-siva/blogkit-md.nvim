@@ -1,0 +1,25 @@
+{
+	"name": "blogkit-md-nvim-website",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@san-siva/blogkit": "^1.1.20",
+		"@san-siva/blogkit-md": "latest",
+		"@san-siva/stylekit": "^1.0.8",
+		"next": "^16.0.10",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"sass": "^1.95.1"
+	},
+	"devDependencies": {
+		"@types/node": "^22",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"typescript": "^5"
+	}
+}
