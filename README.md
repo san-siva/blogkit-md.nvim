@@ -5,7 +5,9 @@ A Neovim plugin that launches a live preview of the current markdown buffer usin
 ## Requirements
 
 - Neovim 0.9+
-- [blogkit-md](https://github.com/san-siva/blogkit-md) cloned locally with dependencies installed (`npm install`)
+- Node.js + npm
+
+No local clone needed — dependencies are installed automatically on first use.
 
 ## Installation
 
@@ -14,55 +16,34 @@ A Neovim plugin that launches a live preview of the current markdown buffer usin
 ```lua
 {
   'san-siva/blogkit-md.nvim',
-  config = function()
-    require('blogkit-md').setup({
-      blogkit_md_dir = '/path/to/blogkit-md',
-    })
-  end,
 }
 ```
 
 ### packer.nvim
 
 ```lua
-use {
-  'san-siva/blogkit-md.nvim',
-  config = function()
-    require('blogkit-md').setup({
-      blogkit_md_dir = '/path/to/blogkit-md',
-    })
-  end,
-}
+use { 'san-siva/blogkit-md.nvim' }
 ```
-
-## Setup
-
-```lua
-require('blogkit-md').setup({
-  -- Path to your local blogkit-md clone (required)
-  blogkit_md_dir = '/Users/you/projects/blogkit-md',
-})
-```
-
-Alternatively, set the `BLOGKIT_MD_DIR` environment variable instead of passing it in `setup()`.
 
 ## Commands
 
-| Command               | Description                                        |
-| :-------------------- | :------------------------------------------------- |
-| `:BlogkitPreview`     | Start a live preview of the current buffer         |
-| `:BlogkitPreviewStop` | Stop the running preview                           |
+| Command               | Description                                    |
+| :-------------------- | :--------------------------------------------- |
+| `:BlogkitPreview`     | Start a live preview of the current buffer     |
+| `:BlogkitPreviewStop` | Stop the running preview                       |
 
 ## Usage
 
 1. Open a markdown file in Neovim.
-2. Run `:BlogkitPreview` — the dev server starts, watches the file for changes, and opens a browser tab automatically.
-3. Edit the file; the browser reloads on save.
+2. Run `:BlogkitPreview` — on first run, dependencies are installed automatically. The browser opens once the server is ready.
+3. Edit and save the file; the browser reloads on every write.
 4. Run `:BlogkitPreviewStop` when done.
 
 ## How it works
 
-The plugin runs `npm run dev -- --file=<buffer_path>` inside the `blogkit-md` directory as a background job. The dev server watches the markdown file via mtime polling and triggers Next.js HMR on every change.
+On first run the plugin bootstraps a minimal Next.js workspace at `~/.local/share/nvim/blogkit-md.nvim/` and runs `npm install` to fetch `@san-siva/blogkit-md` from the npm registry. Subsequent runs skip the install step and start the server immediately.
+
+The plugin registers a `BufWritePost` autocmd on `*.md` files. On every save it updates a `reload-trigger.ts` file inside the workspace. Since `page.tsx` imports that file, Next.js HMR detects the change and re-renders the page, which re-reads the markdown file via `BlogPost`.
 
 ## License
 
