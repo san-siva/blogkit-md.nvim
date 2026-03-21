@@ -1,18 +1,19 @@
-# blogkit-md.nvim
+---
+name: blogkit-md.nvim
+description: A Neovim plugin that launches a live preview of the current markdown buffer using @san-siva/blogkit-md-cli
+---
 
 A Neovim plugin that launches a live preview of the current markdown buffer using [`@san-siva/blogkit-md-cli`](https://github.com/san-siva/blogkit-md-cli).
 
 https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 
-
-
 ## Requirements
 
-| Requirement        | Version  |
-| :----------------- | :------- |
-| Neovim             | 0.9+     |
-| Node.js            | LTS      |
-| blogkit-md-cli     | latest   |
+| Requirement    | Version |
+| :------------- | :------ |
+| Neovim         | 0.9+    |
+| Node.js        | LTS     |
+| blogkit-md-cli | latest  |
 
 ## Getting started
 
@@ -32,10 +33,10 @@ use { 'san-siva/blogkit-md.nvim' }
 
 ## Commands
 
-| Command               | Description                                    |
-| :-------------------- | :--------------------------------------------- |
-| `:BlogkitPreview`     | Start a live preview of the current buffer     |
-| `:BlogkitPreviewStop` | Stop the running preview                       |
+| Command               | Description                                |
+| :-------------------- | :----------------------------------------- |
+| `:BlogkitPreview`     | Start a live preview of the current buffer |
+| `:BlogkitPreviewStop` | Stop the running preview                   |
 
 ## Usage
 
