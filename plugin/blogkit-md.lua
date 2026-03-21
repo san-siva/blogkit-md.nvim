@@ -6,4 +6,8 @@ end, { desc = 'Start blogkit-md live preview for current buffer' })
 
 vim.api.nvim_create_user_command('BlogkitPreviewStop', function()
 	blogkit.stop()
-end, { desc = 'Stop blogkit-md live preview' })
+end, { desc = 'Stop blogkit-md live preview for current buffer' })
+
+vim.api.nvim_create_user_command('BlogkitPreviewStopAll', function()
+	blogkit.stop_all()
+end, { desc = 'Stop all running blogkit-md previews' })
