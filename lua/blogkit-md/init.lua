@@ -2,6 +2,50 @@ local Module = {}
 
 local job_id = nil
 
+-- ─── Private helpers ──────────────────────────────────────────────────────────
+
+local function launch(bufpath)
+	job_id = vim.fn.jobstart({ 'blogkit-md', bufpath }, {
+		on_exit = function(_, code)
+			if code ~= 0 and code ~= 143 then
+				vim.notify('BlogkitMd: exited with code ' .. code, vim.log.levels.WARN)
+			end
+			job_id = nil
+		end,
+	})
+
+	if job_id <= 0 then
+		vim.notify('BlogkitMd: failed to start blogkit-md.', vim.log.levels.ERROR)
+		job_id = nil
+		return
+	end
+
+	vim.notify('BlogkitMd: preview started for ' .. vim.fn.fnamemodify(bufpath, ':t'), vim.log.levels.INFO)
+end
+
+local function ensure_cli(callback)
+	if vim.fn.executable('blogkit-md') == 1 then
+		callback()
+		return
+	end
+
+	vim.notify('BlogkitMd: blogkit-md-cli not found. Installing via npm...', vim.log.levels.INFO)
+
+	vim.fn.jobstart({ 'npm', 'install', '-g', '@san-siva/blogkit-md-cli' }, {
+		on_exit = function(_, code)
+			if code == 0 then
+				vim.notify('BlogkitMd: installed successfully.', vim.log.levels.INFO)
+				callback()
+			else
+				vim.notify(
+					'BlogkitMd: installation failed. Install manually: npm install -g @san-siva/blogkit-md-cli',
+					vim.log.levels.ERROR
+				)
+			end
+		end,
+	})
+end
+
 -- ─── Public API ──────────────────────────────────────────────────────────────
 
 function Module.setup(opts)
@@ -20,22 +64,9 @@ function Module.start()
 		return
 	end
 
-	job_id = vim.fn.jobstart({ 'blogkit-md', bufpath }, {
-		on_exit = function(_, code)
-			if code ~= 0 and code ~= 143 then
-				vim.notify('BlogkitMd: exited with code ' .. code, vim.log.levels.WARN)
-			end
-			job_id = nil
-		end,
-	})
-
-	if job_id <= 0 then
-		vim.notify('BlogkitMd: failed to start. Is blogkit-md installed? (npm install -g @san-siva/blogkit-md-cli)', vim.log.levels.ERROR)
-		job_id = nil
-		return
-	end
-
-	vim.notify('BlogkitMd: preview started for ' .. vim.fn.fnamemodify(bufpath, ':t'), vim.log.levels.INFO)
+	ensure_cli(function()
+		launch(bufpath)
+	end)
 end
 
 function Module.stop()
