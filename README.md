@@ -1,6 +1,6 @@
 # blogkit-md.nvim
 
-A Neovim plugin that launches a live preview of the current markdown buffer using [`@san-siva/blogkit-md`](https://github.com/san-siva/blogkit-md).
+A Neovim plugin that launches a live preview of the current markdown buffer using [`@san-siva/blogkit-md-cli`](https://github.com/san-siva/blogkit-md-cli).
 
 https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 
@@ -8,13 +8,17 @@ https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 
 ## Requirements
 
-| Requirement | Version  |
-| :---------- | :------- |
-| Neovim      | 0.9+     |
-| Node.js     | LTS      |
-| npm         | bundled  |
+| Requirement        | Version  |
+| :----------------- | :------- |
+| Neovim             | 0.9+     |
+| Node.js            | LTS      |
+| blogkit-md-cli     | latest   |
 
-No local clone needed — dependencies are installed automatically on first use.
+Install the CLI globally before use:
+
+```sh
+npm install -g @san-siva/blogkit-md-cli
+```
 
 ## Getting started
 
@@ -42,15 +46,13 @@ use { 'san-siva/blogkit-md.nvim' }
 ## Usage
 
 1. Open a markdown file in Neovim.
-2. Run `:BlogkitPreview` — on first run, dependencies are installed automatically. The browser opens once the server is ready.
+2. Run `:BlogkitPreview` — the browser opens automatically.
 3. Edit and save the file; the browser reloads on every write.
 4. Run `:BlogkitPreviewStop` when done.
 
 ## How it works
 
-The plugin bootstraps a minimal Next.js workspace at `~/.local/share/nvim/blogkit-md.nvim/` and installs `@san-siva/blogkit-md` from npm on first run. Subsequent runs skip the install and start the server immediately.
-
-A `BufWritePost` autocmd fires on every markdown save, updating a `reload-trigger.ts` file inside the workspace. Since `page.tsx` imports that file, Next.js HMR detects the change and re-renders the page — which re-reads the markdown via `BlogPost`.
+The plugin invokes the `blogkit-md` CLI with the current buffer's file path. The CLI starts a pre-built Next.js server, opens the browser, and watches the file for changes — reloading the browser automatically on every save via SSE.
 
 ## License
 
