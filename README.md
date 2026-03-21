@@ -14,12 +14,6 @@ https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 | Node.js            | LTS      |
 | blogkit-md-cli     | latest   |
 
-Install the CLI globally before use:
-
-```sh
-npm install -g @san-siva/blogkit-md-cli
-```
-
 ## Getting started
 
 ### lazy.nvim
