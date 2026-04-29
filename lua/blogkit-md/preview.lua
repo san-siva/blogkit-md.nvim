@@ -34,7 +34,6 @@ function M.launch(bufpath)
 		'BlogkitMd: preview started for ' .. vim.fn.fnamemodify(bufpath, ':t') .. ' on port ' .. port,
 		vim.log.levels.INFO
 	)
-	M.open_browser(port)
 end
 
 function M.ensure_cli(callback)
