@@ -25,13 +25,17 @@ function M.each(fn)
 	end
 end
 
+local function is_port_in_use(port)
+	return vim.fn.system('lsof -ti :' .. port .. ' 2>/dev/null') ~= ''
+end
+
 function M.next_port()
 	local used = {}
 	for _, job in pairs(registry) do
 		used[job.port] = true
 	end
 	local port = BASE_PORT
-	while used[port] do
+	while used[port] or is_port_in_use(port) do
 		port = port + 1
 	end
 	return port

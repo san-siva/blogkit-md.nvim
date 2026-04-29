@@ -14,6 +14,11 @@ function M.start()
 		return
 	end
 
+	if not bufpath:match('%.md$') then
+		vim.notify('BlogkitMd: only markdown files are supported.', vim.log.levels.ERROR)
+		return
+	end
+
 	local job = jobs.get(bufpath)
 	if job then
 		vim.notify(
