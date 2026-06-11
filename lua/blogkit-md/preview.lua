@@ -1,26 +1,16 @@
-local jobs = require 'blogkit-md.jobs'
+local registry = require 'blogkit-md.registry'
 
 local M = {}
 
-function M.open_browser(port)
-	local url = 'http://localhost:' .. port
-	if vim.ui and vim.ui.open then
-		vim.ui.open(url)
-	elseif vim.fn.has('mac') == 1 then
-		vim.fn.jobstart({ 'open', url })
-	else
-		vim.fn.jobstart({ 'xdg-open', url })
-	end
-end
-
-function M.launch(bufpath)
-	local port = jobs.next_port()
-	local id = vim.fn.jobstart({ 'blogkit-md', bufpath, '--port=' .. port }, {
+-- Start a background preview for the given file or directory path. The CLI
+-- opens the browser itself and reuses any existing server for the same path,
+-- so this is safe to call repeatedly.
+function M.start(path)
+	local id = vim.fn.jobstart({ 'blogkit-md', path }, {
 		on_exit = function(_, code)
-			if code ~= 0 and code ~= 143 then
-				vim.notify('BlogkitMd: exited with code ' .. code, vim.log.levels.WARN)
+			if code ~= 0 then
+				vim.notify('BlogkitMd: blogkit-md exited with code ' .. code, vim.log.levels.WARN)
 			end
-			jobs.remove(bufpath)
 		end,
 	})
 
@@ -29,11 +19,15 @@ function M.launch(bufpath)
 		return
 	end
 
-	jobs.set(bufpath, id, port)
-	vim.notify(
-		'BlogkitMd: preview started for ' .. vim.fn.fnamemodify(bufpath, ':t') .. ' on port ' .. port,
-		vim.log.levels.INFO
-	)
+	registry.add(path)
+	vim.notify('BlogkitMd: preview started for ' .. path, vim.log.levels.INFO)
+end
+
+-- Stop the preview serving the given path. Runs synchronously so it completes
+-- even when called on Neovim exit.
+function M.stop(path)
+	vim.fn.system({ 'blogkit-md', '-s', path })
+	registry.remove(path)
 end
 
 function M.ensure_cli(callback)

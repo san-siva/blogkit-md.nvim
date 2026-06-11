@@ -35,22 +35,24 @@ use { 'san-siva/blogkit-md.nvim' }
 
 ## Commands
 
-| Command                   | Description                                |
-| :------------------------ | :----------------------------------------- |
-| `:BlogkitPreview`         | Start a live preview of the current buffer |
-| `:BlogkitPreviewStop`     | Stop the preview for the current buffer    |
-| `:BlogkitPreviewStopAll`  | Stop all running previews                  |
+| Command                 | Description                                              |
+| :---------------------- | :------------------------------------------------------- |
+| `:BlogkitPreviewFile`   | Start a live preview of the current buffer               |
+| `:BlogkitPreviewDir`    | Start a live preview of the working directory            |
+| `:BlogkitPreviewStop`   | Stop every preview started this session                  |
 
 ## Usage
 
 1. Open a markdown file in Neovim.
-2. Run `:BlogkitPreview` — the browser opens automatically.
-3. Edit and save the file; the browser reloads on every write.
-4. Run `:BlogkitPreviewStop` when done, or `:BlogkitPreviewStopAll` to stop all running previews.
+2. Run `:BlogkitPreviewFile` to preview the current buffer, or `:BlogkitPreviewDir` to preview the whole working directory — the browser opens automatically.
+3. Edit and save; the browser reloads on every write.
+4. Run `:BlogkitPreviewStop` when done. Previews are also stopped automatically when you quit Neovim.
 
 ## How it works
 
-The plugin invokes the `blogkit-md` CLI with the current buffer's file path. The CLI starts a pre-built Next.js server, opens the browser, and watches the file for changes — reloading the browser automatically on every save via SSE.
+The plugin invokes the `blogkit-md` CLI with the buffer (or directory) path. The CLI starts a pre-built Next.js server in the background, opens the browser, and watches for changes — reloading the browser automatically on every save via SSE.
+
+The plugin remembers each path it asked the CLI to serve. `:BlogkitPreviewStop` (and quitting Neovim) stops each of them sequentially with `blogkit-md -s <path>`.
 
 ## License
 
