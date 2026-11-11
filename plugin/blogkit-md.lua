@@ -4,9 +4,21 @@ vim.api.nvim_create_user_command('BlogkitPreviewFile', function()
 	blogkit.preview_file()
 end, { desc = 'Start a blogkit-md preview for the current buffer' })
 
-vim.api.nvim_create_user_command('BlogkitPreviewDir', function()
-	blogkit.preview_dir()
-end, { desc = 'Start a blogkit-md preview for the working directory' })
+-- :BlogkitPreviewDir [pattern ...] — patterns replace the configured excludes
+-- for this preview; with ! nothing is excluded.
+vim.api.nvim_create_user_command('BlogkitPreviewDir', function(cmd)
+	local exclude
+	if cmd.bang then
+		exclude = {}
+	elseif #cmd.fargs > 0 then
+		exclude = cmd.fargs
+	end
+	blogkit.preview_dir({ exclude = exclude })
+end, {
+	nargs = '*',
+	bang = true,
+	desc = 'Start a blogkit-md preview for the working directory',
+})
 
 vim.api.nvim_create_user_command('BlogkitPreviewStop', function()
 	blogkit.stop()

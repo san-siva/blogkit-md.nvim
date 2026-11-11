@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 | :------------- | :------ |
 | Neovim         | 0.9+    |
 | Node.js        | LTS     |
-| blogkit-md-cli | latest  |
+| blogkit-md-cli | 0.1.61+ (installed/upgraded automatically) |
 
 ## Getting started
 
@@ -33,12 +33,22 @@ https://github.com/user-attachments/assets/604dab44-7248-4cd8-8a3c-bb3a21e1c26d
 use { 'san-siva/blogkit-md.nvim' }
 ```
 
+### Options
+
+`node_modules` is excluded from directory previews by default. Override it
+(patterns are passed to the CLI's `--exclude`; an empty list excludes nothing):
+
+```lua
+require('blogkit-md').setup({ exclude = { 'node_modules', 'drafts', '*.draft.md' } })
+```
+
 ## Commands
 
 | Command                 | Description                                              |
 | :---------------------- | :------------------------------------------------------- |
 | `:BlogkitPreviewFile`   | Start a live preview of the current buffer               |
-| `:BlogkitPreviewDir`    | Start a live preview of the working directory            |
+| `:BlogkitPreviewDir [pattern ...]` | Start a live preview of the working directory; patterns replace the configured excludes for this run |
+| `:BlogkitPreviewDir!`   | Preview the working directory with nothing excluded      |
 | `:BlogkitPreviewStop`   | Stop every preview started this session                  |
 
 ## Usage

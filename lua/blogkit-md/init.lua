@@ -3,8 +3,12 @@ local registry = require 'blogkit-md.registry'
 
 local M = {}
 
+-- Defaults; `exclude` is forwarded to the CLI as --exclude for directory
+-- previews (names/globs matched against any path segment, e.g. 'node_modules').
+M.config = { exclude = { 'node_modules' } }
+
 function M.setup(opts)
-	M.config = opts or {}
+	M.config = vim.tbl_deep_extend('force', M.config, opts or {})
 end
 
 -- Preview the current buffer's markdown file.
@@ -25,11 +29,15 @@ function M.preview_file()
 	end)
 end
 
--- Preview the working directory of the current Neovim session.
-function M.preview_dir()
+-- Preview the working directory of the current Neovim session. `opts.exclude`
+-- (a list of patterns) overrides the configured excludes for this call; an
+-- empty list excludes nothing.
+function M.preview_dir(opts)
+	opts = opts or {}
 	local dir = vim.fn.getcwd()
+	local exclude = opts.exclude or M.config.exclude
 	preview.ensure_cli(function()
-		preview.start(dir)
+		preview.start(dir, exclude)
 	end)
 end
 
